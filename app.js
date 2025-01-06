@@ -22,7 +22,7 @@ app.post('/register', (req, res) => {
   bcrypt.genSalt(10, function (err, salt) {
     bcrypt.hash(password, salt, async function (err, hash) {
       const user = await User.create({ name, email, password: hash });
-      var token = jwt.sign({ email }, 'shhhhh');
+      const token = jwt.sign({ email }, 'shhhhh');
       res.cookie('token', token);
       res.send(user);
     });
@@ -42,6 +42,8 @@ app.post('/login', async (req, res) => {
   }
   bcrypt.compare(password, user.password, function (err, result) {
     if (result) {
+      const token = jwt.sign({ email }, 'shhhhh');
+      res.cookie('token', token);
       res.send('Login Successful');
     } else {
       res.status(400).send('Something went wrong');
